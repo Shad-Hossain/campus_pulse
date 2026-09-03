@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.landingscreen{
+    display:flex;
+    flex-direction: row;
+    height: 100vh;  
+    justify-content: space-evenly;
+    width:100%;
+}
+
+.greenside{
+    flex:1;
+    background-color: rgb(2, 44, 2);
+    color:goldenrod;
+    display:flex;
+    flex-direction:column;
+    justify-content: center;  
+    align-items:center;
+    text-align: center; 
+}
+
+.greenside h2{
+    font-family: cursive;
+    font-size: 60px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border-color: goldenrod;
+    border-style: solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px auto;  
+}
+
+.greenside p{
+    padding-top:30px;
+    font-size: xx-large;
+    margin-top: 0;   
+}
+.beigeside{
+        flex:1;        
+    background-color: beige; 
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items:center;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: xx-large;
+    gap:50px;
+}
+
+.loginsignupbutton{  
+    display:flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.loginsignupbutton a{
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.loginsignupbutton a:first-child{   /* Login button */
+    background-color: #2E7D32;
+    color: white;
+}
+
+.loginsignupbutton a:last-child{    /* Signup button */
+    background-color: transparent;
+    border: 2px solid #2E7D32;
+    color: #2E7D32;
+}
+
+.loginsignupbutton a:hover{
+    transform: translateY(-2px);
+    opacity: 0.9;
+} 
+.loginsignupbutton a{
+    text-decoration: none;
+}
+
