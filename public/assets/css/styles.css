@@ -58,7 +58,6 @@ html, body {
     font-size: xx-large;
     gap:50px;
 }
-
 .loginsignupbutton{  
     display:flex;
     gap: 12px;
@@ -94,3 +93,55 @@ html, body {
     text-decoration: none;
 }
 
+.loginform{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 300px;
+    margin-top: 20px;
+}
+
+.loginform input{
+    padding: 12px 14px;
+    border: 2px solid #2E7D32;
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+    background: transparent;
+}
+
+.loginform input:focus{
+    border-color: goldenrod;
+}
+
+.loginbtn{
+    padding: 12px 24px;
+    background-color: #2E7D32;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.loginbtn:hover{
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.signuplink{
+    margin-top: 16px;
+    font-size: medium;
+}
+
+.signuplink a{
+    color: #2E7D32;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signuplink a:hover{
+    text-decoration: underline;
+}
