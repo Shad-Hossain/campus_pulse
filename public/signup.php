@@ -42,11 +42,31 @@
         </div>
     </div>
 
-    <script>
-        const roleInput = document.getElementById('roleinput');
-        document.getElementById('tabstudent').addEventListener('change', () => roleInput.value = 'student');
-        document.getElementById('tabfaculty').addEventListener('change', () => roleInput.value = 'faculty');
-        document.getElementById('tabadmin').addEventListener('change', () => roleInput.value = 'admin');
-    </script>
+   <script>
+    const roleInput = document.getElementById('roleinput');
+    document.getElementById('tabstudent').addEventListener('change', () => roleInput.value = 'student');
+    document.getElementById('tabfaculty').addEventListener('change', () => roleInput.value = 'faculty');
+    document.getElementById('tabadmin').addEventListener('change', () => roleInput.value = 'admin');
+
+    document.querySelector('.loginform').addEventListener('submit', function(e){
+        e.preventDefault();
+
+        const fullname = this.fullname.value.trim();
+        const username = this.username.value.trim();
+        const password = this.password.value;
+        const confirm  = this.confirm_password.value;
+        const role     = roleInput.value;
+
+        if (password !== confirm) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        // demo: just log them straight in with entered info
+        const newUser = { username, password, role, name: fullname };
+        localStorage.setItem('campus_pulse_user', JSON.stringify(newUser));
+        window.location.href = "dashboard.php";
+    });
+</script>
 </body>
 </html>
