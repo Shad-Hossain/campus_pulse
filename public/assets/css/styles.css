@@ -145,4 +145,433 @@ html, body {
 .signuplink a:hover{
     text-decoration: underline;
 }
+.roletabs{
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
 
+.roletabs input[type="radio"]{
+    display: none;
+}
+
+.roletabs label{
+    padding: 8px 18px;
+    border: 2px solid #2E7D32;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2E7D32;
+    transition: all 0.15s ease;
+}
+
+.roletabs input[type="radio"]:checked + label{
+    background-color: #2E7D32;
+    color: white;
+}
+
+/* ==================== DASHBOARD (app shell) ==================== */
+
+.dash-body{
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: beige;
+}
+
+.app-shell{
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ---- Sidebar ---- */
+.sidebar{
+    width: 240px;
+    background-color: rgb(2, 44, 2);
+    color: beige;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.side-brand{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: cursive;
+    font-size: 20px;
+    color: goldenrod;
+    margin-bottom: 16px;
+}
+
+.dash-logo{
+    border: 2px solid goldenrod;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.role-tag{
+    align-self: flex-start;
+    background: goldenrod;
+    color: rgb(2, 44, 2);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.side-nav{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.nav-btn{
+    display: block;
+    background: transparent;
+    border: none;
+    color: beige;
+    padding: 9px 12px;
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease, padding-left 0.15s ease;
+}
+
+.nav-btn:hover{
+    background: rgba(255,255,255,0.1);
+    color: goldenrod;
+    padding-left: 18px;
+}
+
+.nav-btn.active{
+    background: rgba(255,255,255,0.15);
+    color: goldenrod;
+    font-weight: 600;
+}
+
+.side-foot{
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 14px;
+}
+
+.side-foot button{
+    display: block;
+    margin-top: 8px;
+    background: transparent;
+    border: 1px solid goldenrod;
+    color: goldenrod;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* ---- Main area ---- */
+.main{
+    flex: 1;
+    padding: 28px 32px;
+    width: 100%;
+}
+
+.topbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.topbar h1{
+    font-family: cursive;
+    color: rgb(2, 44, 2);
+    margin: 0;
+}
+
+.avatar{
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #2E7D32;
+    color: white;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.dash-ticker{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #2E7D32;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.dash-ticker-badge{
+    background: goldenrod;
+    color: rgb(2, 44, 2);
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.live-counter{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.lc-dot{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2E7D32;
+}
+
+.live-counter .num{
+    font-weight: 700;
+    color: rgb(2, 44, 2);
+}
+
+/* ---- Views ---- */
+.view{ display: none; }
+.view.active{ display: block; }
+
+.section-title{
+    font-weight: 600;
+    color: rgb(2, 44, 2);
+    margin: 20px 0 12px;
+}
+
+.section-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.action-btn{
+    background: rgb(2, 44, 2);
+    color: goldenrod;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* ---- Cards ---- */
+.dash-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.dash-card{
+    background: white;
+    border-left: 4px solid #2E7D32;
+    border-radius: 8px;
+    padding: 16px 18px;
+}
+
+.dash-card h3{ margin: 0 0 6px; font-size: 15px; color: rgb(2, 44, 2); }
+.dash-card p{ margin: 0; font-size: 13px; color: #666; }
+
+/* ---- Quick links ---- */
+.qlink-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.qlink-card{
+    background: rgb(2, 44, 2);
+    color: goldenrod;
+    padding: 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ---- Forms ---- */
+.form-card{
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 18px;
+    margin-top: 12px;
+}
+
+.form-row2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.field{ margin-bottom: 12px; }
+.field label{ display: block; font-size: 13px; margin-bottom: 4px; color: #444; }
+
+.field input,
+.field select,
+.field textarea{
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.btn-primary{
+    background: #2E7D32;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ---- Filter chips ---- */
+.filter-row{
+    display: flex;
+    gap: 8px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+}
+
+.chip{
+    background: white;
+    border: 1px solid #2E7D32;
+    color: #2E7D32;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.chip.active{
+    background: #2E7D32;
+    color: white;
+}
+
+/* ---- Directory table ---- */
+.search-bar input{
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.directory{
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.directory th, .directory td{
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.directory th{
+    background: rgb(2, 44, 2);
+    color: goldenrod;
+}
+
+/* ---- Profile ---- */
+.stat-box{
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.profile-head{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.avatar-lg{
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #2E7D32;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.saved-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+/* ---- Toggle switch ---- */
+.switch{
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+}
+
+.switch input{ display: none; }
+
+.switch-slider{
+    position: absolute;
+    inset: 0;
+    background: #ccc;
+    border-radius: 22px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.switch-slider::before{
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.switch input:checked + .switch-slider{ background: #2E7D32; }
+.switch input:checked + .switch-slider::before{ transform: translateX(18px); }
