@@ -218,9 +218,9 @@
     <script>
 // ================= Demo data (replace with fetch() calls once PHP backend is ready) =================
 const demoNews = [
-    { title: "Spring 2027 registration opens Sept 15", tag: "Academic" },
-    { title: "New research grant call for CSE dept", tag: "Research" },
-    { title: "Campus wifi maintenance this weekend", tag: "Notice" }
+    { title: "Spring 2027 registration opens Sept 15", tag: "Academic", cat: "Academic" },
+    { title: "New research grant call for CSE dept", tag: "Research", cat: "Academic" },
+    { title: "Campus wifi maintenance this weekend", tag: "Notice", cat: "Admin" }
 ];
 
 const demoEvents = [
@@ -230,15 +230,16 @@ const demoEvents = [
 ];
 
 const demoQuickLinks = [
-    { title: "UIU Student Portal", url: "#" },
-    { title: "Google Classroom", url: "#" },
-    { title: "Library Catalog", url: "#" },
-    { title: "Academic Calendar", url: "#" }
+    { title: "UCAM (Student Portal)", url: "https://ucam.uiu.ac.bd/Security/Login.aspx" },
+    { title: "ELMS", url: "https://elms.uiu.ac.bd/login/index.php" },
+    { title: "UIU Notice Board", url: "https://www.uiu.ac.bd/notice/" },
+    { title: "Examcon", url: "https://examcon.uiu.ac.bd/" },
+    { title: "CGPA Calculator", url: "https://naiimur.me/UIU-CGPA-Calculator/" }
 ];
 
 const demoResources = [
-    { title: "CSE 4165 Midterm Notes", meta: "Notes" },
-    { title: "CSE 3521 Previous Year Question", meta: "Question bank" }
+    { title: "CSE 4165 Midterm Notes", meta: "Notes", kind: "notes" },
+    { title: "CSE 3521 Previous Year Question", meta: "Question bank", kind: "qbank" }
 ];
 
 const demoMyGrants = [
@@ -283,7 +284,7 @@ function renderCards(containerId, items, keyMain, keySub) {
 function renderQuickLinks() {
     const container = document.getElementById('qlink-grid');
     container.innerHTML = demoQuickLinks.map(link => `
-        <a class="qlink-card" href="${link.url}">${link.title}</a>
+        <a class="qlink-card" href="${link.url}" target="_blank" rel="noopener noreferrer">${link.title}</a>
     `).join('');
 }
 
@@ -299,6 +300,21 @@ function renderDirectory() {
     body.innerHTML = demoDirectory.map(u => `
         <tr><td>${u.name}</td><td>${u.dept}</td><td>${u.role}</td></tr>
     `).join('');
+}
+
+function filterResources(kind) {
+    const filtered = kind === 'all' ? demoResources : demoResources.filter(r => r.kind === kind);
+    renderCards('resources-grid', filtered, 'title', 'meta');
+}
+
+function filterEvents(cat) {
+    const filtered = cat === 'all' ? demoEvents : demoEvents.filter(e => e.cat === cat);
+    renderCards('events-grid', filtered, 'title', 'meta');
+}
+
+function filterSearch(cat) {
+    const filtered = cat === 'all' ? demoNews : demoNews.filter(n => n.cat === cat);
+    renderCards('search-grid', filtered, 'title', 'tag');
 }
 
 function switchView(viewId) {
@@ -322,32 +338,32 @@ function loadDashboard(user) {
 
     // common nav for every role
     let menuItems = [
-        { id: 'home', label: 'Home feed', icon: 'H' },
-        { id: 'events', label: 'Events', icon: 'E' },
-        { id: 'resources', label: 'Study Hub', icon: 'S' }
+        { id: 'home', label: 'Home feed' },
+        { id: 'events', label: 'Events' },
+        { id: 'resources', label: 'Study Hub' }
     ];
 
     if (user.role === 'student') {
-        menuItems.push({ id: 'achievements', label: 'Achievements', icon: 'A' });
+        menuItems.push({ id: 'achievements', label: 'Achievements' });
     } else if (user.role === 'faculty') {
-        menuItems.push({ id: 'grants', label: 'My Research', icon: 'R' });
+        menuItems.push({ id: 'grants', label: 'My Research' });
         document.getElementById('event-create-toggle').style.display = 'inline-block';
     } else if (user.role === 'admin') {
-        menuItems.push({ id: 'grants-admin', label: 'Manage Grants', icon: 'G' });
-        menuItems.push({ id: 'alerts', label: 'Manage Alerts', icon: 'AL' });
-        menuItems.push({ id: 'directory', label: 'User Directory', icon: 'D' });
+        menuItems.push({ id: 'grants-admin', label: 'Manage Grants' });
+        menuItems.push({ id: 'alerts', label: 'Manage Alerts' });
+        menuItems.push({ id: 'directory', label: 'User Directory' });
         document.getElementById('event-create-toggle').style.display = 'inline-block';
     }
 
-    menuItems.push({ id: 'search', label: 'Search', icon: 'Q' });
-    menuItems.push({ id: 'profile', label: 'Profile', icon: 'P' });
+    menuItems.push({ id: 'search', label: 'Search' });
+    menuItems.push({ id: 'profile', label: 'Profile' });
 
     const sideNav = document.getElementById('side-nav');
     sideNav.innerHTML = '';
     menuItems.forEach((item, index) => {
         const btn = document.createElement('button');
         btn.className = 'nav-btn' + (index === 0 ? ' active' : '');
-        btn.innerHTML = `<span>${item.icon}</span> ${item.label}`;
+        btn.innerHTML = item.label;
         btn.onclick = () => {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -359,14 +375,14 @@ function loadDashboard(user) {
     // fill every section with its demo data (only relevant ones will ever be viewed,
     // but rendering all is harmless and keeps this simple)
     renderCards('news-grid', demoNews, 'title', 'tag');
-    renderCards('events-grid', demoEvents, 'title', 'meta');
-    renderCards('resources-grid', demoResources, 'title', 'meta');
+    filterEvents('all');
+    filterResources('notes');
     renderCards('my-grants-grid', demoMyGrants, 'title', 'meta');
     renderCards('achieve-grid', demoAchievements, 'title', 'meta');
     renderCards('grant-grid', demoGrants, 'title', 'meta');
     renderCards('grants-pending-grid', demoGrantsPending, 'title', 'meta');
     renderCards('grant-grid-admin', demoGrants, 'title', 'meta');
-    renderCards('search-grid', demoNews, 'title', 'tag');
+    filterSearch('all');
     renderQuickLinks();
     renderAlertsList();
     renderDirectory();
@@ -388,12 +404,20 @@ document.getElementById('grant-create-toggle')?.addEventListener('click', () => 
     form.style.display = form.style.display === 'none' ? 'block' : 'none';
 });
 
-// filter chips (events / search) — just toggles active state visually in demo
+// filter chips (events / resources / search)
 document.querySelectorAll('.filter-row').forEach(row => {
     row.querySelectorAll('.chip').forEach(chip => {
         chip.addEventListener('click', () => {
             row.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
+
+            if (row.id === 'resource-tabs') {
+                filterResources(chip.dataset.kind);
+            } else if (row.id === 'search-filter') {
+                filterSearch(chip.dataset.cat);
+            } else if (row.id === 'events-filter') {
+                filterEvents(chip.dataset.cat);
+            }
         });
     });
 });
