@@ -1,0 +1,28 @@
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/index.php" class="brand">
+      <span class="brand-mark">EB</span>
+      <span class="brand-text">Explore<em>Bangladesh</em></span>
+    </a>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="/index.php" data-nav="index.php">Home</a>
+      <a href="/destinations.php" data-nav="destinations.php">Destinations</a>
+      <a href="/weather_suggestion.php" data-nav="weather_suggestion.php">Weather Planner</a>
+      <a href="/hotels.php" data-nav="hotels.php">Stays</a>
+      <a href="/shared_rides.php" data-nav="shared_rides.php">Share a Ride</a>
+      <a href="/favourites.php" data-nav="favourites.php">Favourites</a>
+      <a href="/booking_history.php" data-nav="booking_history.php" data-auth-only style="display:none;">My Bookings</a>
+    </nav>
+
+    <div class="header-actions" id="headerAuthArea">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false">
+        <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+      </button>
+      <!-- Filled in by js/layout.js after checking /api/auth/session.php -->
+      <span id="authSlot"></span>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+  </div>
+</header>

@@ -1,0 +1,19 @@
+# --- Secrets / local config (never commit) ---
+config/weather_api_key.php
+.env
+.env.*
+
+# --- OS / editor junk ---
+.DS_Store
+__MACOSX/
+Thumbs.db
+.vscode/
+.idea/
+
+# --- PHP / server local files ---
+vendor/
+*.log
+*.sql.bak
+
+# --- XAMPP/WAMP local artifacts (if project sits inside htdocs) ---
+error_log
