@@ -111,7 +111,7 @@
                 <div class="dash-grid" id="my-grants-grid"></div>
             </section>
 
-            <!-- ---- ACHIEVEMENTS (student) ---- -->
+            <!-- ACHIEVEMENTS (student) -->
             <section class="view" id="view-achievements" data-title="Achievements">
                 <div class="section-title">Student &amp; faculty spotlight</div>
                 <div class="dash-grid" id="achieve-grid"></div>
@@ -216,7 +216,7 @@
     </div>
 
     <script>
-// ================= Demo data (replace with fetch() calls once PHP backend is ready) =================
+//  Demo data 
 const demoNews = [
     { title: "Spring 2027 registration opens Sept 15", tag: "Academic", cat: "Academic" },
     { title: "New research grant call for CSE dept", tag: "Research", cat: "Academic" },
