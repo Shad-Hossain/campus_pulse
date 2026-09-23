@@ -1,1 +1,4 @@
 .DS_Store
+config/db.local.php
+public/uploads/resources/*
+!public/uploads/resources/.gitkeep
