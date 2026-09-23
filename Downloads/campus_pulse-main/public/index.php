@@ -1,10 +1,14 @@
+<?php
+require_once __DIR__ . '/../includes/helpers.php';
+if (current_user()) { header('Location: dashboard.php'); exit; }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus_pulse</title>
-    <link rel="stylesheet" href="assets/css/styles.css"">
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
     

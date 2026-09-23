@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/../includes/helpers.php';
+if (current_user()) { header('Location: dashboard.php'); exit; }
+$error = flash_get('signup_error');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,17 +28,16 @@
 
                 <input type="radio" name="roletab" id="tabfaculty">
                 <label for="tabfaculty">Faculty</label>
-
-                <input type="radio" name="roletab" id="tabadmin">
-                <label for="tabadmin">Admin</label>
             </div>
 
-            <form class="loginform" action="includes/signup_handler.php" method="POST">
+            <form class="loginform" action="auth/signup.php" method="POST">
+                <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="role" id="roleinput" value="student">
+                <?php if ($error): ?><p class="form-error" style="color:#8b1e1e;margin:0 0 10px;font-size:14px;"><?= e($error) ?></p><?php endif; ?>
                 <input type="text" name="fullname" placeholder="Full Name" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="text" name="username" placeholder="Username" required>
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Password (min 8 characters)" required minlength="8">
                 <input type="password" name="confirm_password" placeholder="Confirm Password" required>
                 <button type="submit" class="loginbtn">Sign Up</button>
             </form>
@@ -46,26 +50,13 @@
     const roleInput = document.getElementById('roleinput');
     document.getElementById('tabstudent').addEventListener('change', () => roleInput.value = 'student');
     document.getElementById('tabfaculty').addEventListener('change', () => roleInput.value = 'faculty');
-    document.getElementById('tabadmin').addEventListener('change', () => roleInput.value = 'admin');
 
-    document.querySelector('.loginform').addEventListener('submit', function(e){
-        e.preventDefault();
-
-        const fullname = this.fullname.value.trim();
-        const username = this.username.value.trim();
-        const password = this.password.value;
-        const confirm  = this.confirm_password.value;
-        const role     = roleInput.value;
-
-        if (password !== confirm) {
-            alert("Passwords do not match.");
-            return;
+    // quick client-side check (PHP verifies again in auth/signup.php)
+    document.querySelector('.loginform').addEventListener('submit', function (e) {
+        if (this.password.value !== this.confirm_password.value) {
+            e.preventDefault();
+            alert('Passwords do not match.');
         }
-
-        // demo: just log them straight in with entered info
-        const newUser = { username, password, role, name: fullname };
-        localStorage.setItem('campus_pulse_user', JSON.stringify(newUser));
-        window.location.href = "dashboard.php";
     });
 </script>
 </body>

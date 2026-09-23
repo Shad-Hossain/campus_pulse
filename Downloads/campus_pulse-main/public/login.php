@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/../includes/helpers.php';
+if (current_user()) { header('Location: dashboard.php'); exit; }
+$error = flash_get('login_error');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,8 +33,10 @@
                 <label for="tabadmin">Admin</label>
             </div>
 
-            <form class="loginform" action="includes/login_handler.php" method="POST">
+            <form class="loginform" action="auth/login.php" method="POST">
+                <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="role" id="roleinput" value="student">
+                <?php if ($error): ?><p class="form-error" style="color:#8b1e1e;margin:0 0 10px;font-size:14px;"><?= e($error) ?></p><?php endif; ?>
                 <input type="text" name="username" placeholder="Username or Email" required>
                 <input type="password" name="password" placeholder="Password" required>
                 <button type="submit" class="loginbtn">Login</button>
@@ -40,43 +47,11 @@
     </div>
 
     <script>
-    // ---- Mock user database (demo only) ----
-    const mockUsers = [
-        { username: "student1", password: "1234", role: "student", name: "Shad" },
-        { username: "faculty1", password: "1234", role: "faculty", name: "Dr. Farhana" },
-        { username: "admin1",   password: "1234", role: "admin",   name: "Admin" }
-    ];
-
+    // role tabs only set the hidden "role" input; login itself is verified by PHP (auth/login.php)
     const roleInput = document.getElementById('roleinput');
     document.getElementById('tabstudent').addEventListener('change', () => roleInput.value = 'student');
     document.getElementById('tabfaculty').addEventListener('change', () => roleInput.value = 'faculty');
     document.getElementById('tabadmin').addEventListener('change', () => roleInput.value = 'admin');
-
-    // ---- Handle login form submit ----
-    document.querySelector('.loginform').addEventListener('submit', function(e){
-        e.preventDefault(); // stop normal form submit (no PHP backend yet)
-
-        const username = this.username.value.trim();
-        const password = this.password.value;
-        const role = roleInput.value;
-
-        // find a matching mock user
-        const found = mockUsers.find(u =>
-            u.username === username && u.password === password && u.role === role
-        );
-
-        if (found) {
-            localStorage.setItem('campus_pulse_user', JSON.stringify(found));
-            window.location.href = "dashboard.php";
-        } else {
-            alert("Invalid username, password, or role selected.");
-        }
-    });
-
-    // ---- Already logged in? skip login page ----
-    if (localStorage.getItem('campus_pulse_user')) {
-        window.location.href = "dashboard.php";
-    }
 </script>
 </body>
 </html>
