@@ -126,9 +126,18 @@
         pill.className = 'status-pill ' + data.status;
         pill.textContent = data.status;
 
-        $('ticker-text').textContent = data.alerts.length
-            ? data.alerts.map(a => a.title).join(' · ')
+        const tickerMsg = data.alerts.length
+            ? data.alerts.map(a => a.title).join('   ·   ')
             : 'No active alerts. Campus is running normally.';
+        const ticker = $('ticker-text');
+        if (ticker.textContent !== tickerMsg) {
+            ticker.textContent = tickerMsg;
+            // restart the CSS marquee animation and scale its speed to the text length
+            ticker.style.animation = 'none';
+            void ticker.offsetWidth; // force reflow
+            ticker.style.animation = '';
+            ticker.style.animationDuration = Math.max(10, tickerMsg.length * 0.22) + 's';
+        }
 
         if (CP.user.role === 'admin') {
             $('admin-status-select').value = data.status;
@@ -162,6 +171,28 @@
         $('profile-email').value = profile.email;
         $('profile-bio').value   = profile.bio || '';
         document.querySelectorAll('input[data-key]').forEach(cb => { cb.checked = !!settings[cb.dataset.key]; });
+        setAvatar(profile.avatar);
+    }
+
+    // renders the avatar image everywhere it's shown; falls back to the initial letter
+    function setAvatar(url) {
+        const initial = (CP.user.name || '?').charAt(0).toUpperCase();
+        [$('topbar-avatar'), $('profile-avatar-fallback')].forEach(el => {
+            if (!el) return;
+            el.innerHTML = url ? `<img src="${esc(url)}" alt="Profile picture">` : initial;
+        });
+    }
+
+    const notifKindLabel = { Traffic: 'Traffic alert', Weather: 'Weather alert', Event: 'Upcoming event', Research: 'Research & grants' };
+
+    async function loadNotifications() {
+        const { items } = await get('api/notifications.php');
+        $('notif-dot').style.display = items.length ? 'block' : 'none';
+        $('notif-list').innerHTML = items.length
+            ? items.map(n => `<div class="notif-item"><b>${esc(notifKindLabel[n.kind] || n.kind)}</b>${esc(n.title)}<br><span>${
+                n.when ? esc(fmtDate(n.when)) : esc(ago(n.mins_ago))
+              }</span></div>`).join('')
+            : '<p style="opacity:.7;padding:14px;font-size:13px;">No notifications — turn on alerts you care about in Profile.</p>';
     }
 
     // which loader runs when a sidebar view opens
@@ -191,7 +222,7 @@
     function loadDashboard(user) {
         const roleName = cap(user.role);
         $('side-name').innerText = user.name;
-        $('topbar-avatar').innerText = user.name.charAt(0).toUpperCase();
+        setAvatar(user.avatar);
         $('role-tag').innerText = roleName;
         $('profile-head-sub').innerText = roleName;
 
@@ -230,7 +261,9 @@
 
         switchView('home');
         loadAlerts().catch(fail);
+        loadNotifications().catch(() => {});   // just for the badge dot; panel content reloads on open
         setInterval(() => loadAlerts().catch(() => {}), 60000);   // keep ticker + status pill fresh
+        setInterval(() => loadNotifications().catch(() => {}), 60000);
     }
 
     /* ================= UI wiring ================= */
@@ -322,10 +355,42 @@
     // profile
     $('profile-save-btn').addEventListener('click', e => busy(e.target, async () => {
         const r = await post('api/profile.php', { full_name: $('profile-name').value, bio: $('profile-bio').value });
+        CP.user.name = r.name;
         $('side-name').innerText = r.name;
         $('profile-head-name').textContent = r.name;
-        $('topbar-avatar').innerText = r.name.charAt(0).toUpperCase();
     }));
+
+    // change profile picture
+    $('avatar-save-btn').addEventListener('click', e => busy(e.target, async () => {
+        const file = $('avatar-file').files[0];
+        if (!file) { alert('Choose an image first.'); return; }
+        const fd = new FormData();
+        fd.append('avatar', file);
+        const r = await api('api/profile.php', { method: 'POST', form: fd });
+        setAvatar(r.avatar);
+        $('avatar-file').value = '';
+    }));
+
+    // change password
+    $('pw-save-btn').addEventListener('click', e => busy(e.target, async () => {
+        const cur = $('pw-current').value, pw1 = $('pw-new').value, pw2 = $('pw-confirm').value;
+        if (pw1.length < 8) { alert('New password must be at least 8 characters.'); return; }
+        if (pw1 !== pw2) { alert('New passwords do not match.'); return; }
+        await post('api/profile.php', { current_password: cur, new_password: pw1 });
+        ['pw-current', 'pw-new', 'pw-confirm'].forEach(id => $(id).value = '');
+        alert('Password updated.');
+    }));
+
+    // notification bell
+    $('notif-bell').addEventListener('click', () => {
+        const panel = $('notif-panel');
+        const opening = panel.style.display === 'none';
+        panel.style.display = opening ? 'block' : 'none';
+        if (opening) loadNotifications().catch(fail);
+    });
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.notif-wrap')) $('notif-panel').style.display = 'none';
+    });
     document.querySelectorAll('input[data-key]').forEach(cb => {
         cb.addEventListener('change', () => {
             const settings = {};
