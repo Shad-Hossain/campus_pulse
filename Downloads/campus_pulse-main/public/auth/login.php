@@ -34,6 +34,7 @@ $_SESSION['user'] = [
     'email'      => $user['email'],
     'role'       => $user['role'],
     'department' => $user['department'],
+    'avatar'     => $user['avatar'] ?? null,
 ];
 header('Location: ../dashboard.php');
 exit;
