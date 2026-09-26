@@ -306,7 +306,72 @@ html, body {
     border: none;
     font-weight: 700;
     cursor: pointer;
+    overflow: hidden;
+    padding: 0;
 }
+
+.avatar img,
+.avatar-lg img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+/* ---- Notification bell ---- */
+.notif-wrap{ position: relative; margin-left: auto; margin-right: 14px; }
+
+.bell-btn{
+    background: transparent;
+    border: none;
+    font-size: 19px;
+    cursor: pointer;
+    position: relative;
+    line-height: 1;
+    padding: 6px;
+}
+
+.notif-dot{
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #b7791f;
+    border: 2px solid beige;
+}
+
+.notif-panel{
+    position: absolute;
+    right: 0;
+    top: 38px;
+    width: 320px;
+    max-height: 360px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    z-index: 20;
+}
+
+.notif-panel-head{
+    padding: 12px 14px;
+    font-weight: 700;
+    color: rgb(2, 44, 2);
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.notif-item{
+    padding: 10px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+}
+
+.notif-item b{ display:block; color: rgb(2, 44, 2); font-size: 13px; margin-bottom: 2px; }
+.notif-item span{ color: #777; font-size: 12px; }
 
 .dash-ticker{
     display: flex;
@@ -318,6 +383,25 @@ html, body {
     border-radius: 6px;
     font-size: 14px;
     margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.dash-ticker-track{
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+}
+
+.dash-ticker-track #ticker-text{
+    display: inline-block;
+    padding-left: 100%;
+    animation: ticker-scroll 18s linear infinite;
+}
+
+@keyframes ticker-scroll{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-100%); }
 }
 
 .dash-ticker-badge{
