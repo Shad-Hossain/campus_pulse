@@ -33,6 +33,10 @@ if ($fullName === '' || $username === '' || $email === '') {
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     back('Enter a valid email address.');
 }
+// Students must sign up with their official UIU email (e.g. name@uiu.ac.bd)
+if ($role === 'student' && !preg_match('/@([a-z0-9-]+\.)*uiu\.ac\.bd$/i', $email)) {
+    back('Students must sign up with a valid UIU email (must end with @uiu.ac.bd).');
+}
 if (!preg_match('/^[A-Za-z0-9_.]{3,30}$/', $username)) {
     back('Username: 3-30 characters, letters/numbers/_/. only.');
 }
@@ -59,7 +63,10 @@ try {
         back('Username or email already registered.');
     }
     error_log($ex);
-    back('Something went wrong. Try again.');
+    // --- TEMP DEBUG ---
+    // Real message ta ekhane dekhabo (production e r r safe na, kaj hoye gele
+    // ei line ta abar 'Something went wrong. Try again.' diye replace kore dio):
+    back('DB error: ' . $ex->getMessage());
 }
 
 // auto login
