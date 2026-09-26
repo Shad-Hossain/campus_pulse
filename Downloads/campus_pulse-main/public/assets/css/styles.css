@@ -320,7 +320,7 @@ html, body {
 }
 
 /* ---- Notification bell ---- */
-.notif-wrap{ position: relative; margin-left: auto; margin-right: 14px; }
+.notif-wrap{ position: relative; margin-left: 10px; margin-right: 14px; }
 
 .bell-btn{
     background: transparent;
