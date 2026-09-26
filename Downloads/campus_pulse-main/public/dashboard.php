@@ -40,12 +40,23 @@ $user = require_login_page('login.php');   // not logged in => back to login
             <div class="topbar">
                 <h1 id="view-title">Home feed</h1>
                 <span class="status-pill" id="status-pill">Normal</span>
+                <div class="notif-wrap">
+                    <button class="bell-btn" id="notif-bell" aria-label="Notifications">
+                        🔔<span class="notif-dot" id="notif-dot" style="display:none;"></span>
+                    </button>
+                    <div class="notif-panel" id="notif-panel" style="display:none;">
+                        <div class="notif-panel-head">Notifications</div>
+                        <div id="notif-list"><p style="opacity:.7;padding:14px;font-size:13px;">Loading...</p></div>
+                    </div>
+                </div>
                 <button class="avatar" id="topbar-avatar">S</button>
             </div>
 
             <div class="dash-ticker">
                 <span class="dash-ticker-badge">LIVE</span>
-                <span id="ticker-text">Loading alerts...</span>
+                <div class="dash-ticker-track">
+                    <span id="ticker-text">Loading alerts...</span>
+                </div>
             </div>
 
             <!-- ---- HOME ---- -->
@@ -203,6 +214,11 @@ $user = require_login_page('login.php');   // not logged in => back to login
                                 <span id="profile-head-sub">Student</span>
                             </div>
                         </div>
+                        <div class="field">
+                            <label>Profile picture</label>
+                            <input type="file" id="avatar-file" accept=".png,.jpg,.jpeg,.webp">
+                            <button class="btn-primary" id="avatar-save-btn" style="margin-top:8px;">Change picture</button>
+                        </div>
                         <div class="field"><label>Full name</label><input type="text" id="profile-name" value=""></div>
                         <div class="field"><label>UIU email</label><input type="text" id="profile-email" value="" disabled></div>
                         <div class="field"><label>Short bio</label><textarea id="profile-bio"></textarea></div>
@@ -224,6 +240,13 @@ $user = require_login_page('login.php');   // not logged in => back to login
                                 <label class="switch"><input type="checkbox" data-key="research_alerts"><span class="switch-slider"></span></label>
                             </div>
                         </div>
+                        <div class="section-title">Change password</div>
+                        <div class="stat-box">
+                            <div class="field"><label>Current password</label><input type="password" id="pw-current"></div>
+                            <div class="field"><label>New password</label><input type="password" id="pw-new" minlength="8"></div>
+                            <div class="field"><label>Confirm new password</label><input type="password" id="pw-confirm" minlength="8"></div>
+                            <button class="btn-primary" id="pw-save-btn">Update password</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -240,6 +263,7 @@ $user = require_login_page('login.php');   // not logged in => back to login
                 'username'   => $user['username'],
                 'email'      => $user['email'],
                 'role'       => $user['role'],
+                'avatar'     => $user['avatar'] ?? null,
             ],
             'csrf' => csrf_token(),
         ], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;

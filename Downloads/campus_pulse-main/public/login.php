@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/../includes/helpers.php';
 if (current_user()) { header('Location: dashboard.php'); exit; }
-$error = flash_get('login_error');
+$error  = flash_get('login_error');
+$notice = flash_get('login_notice');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,12 +37,14 @@ $error = flash_get('login_error');
             <form class="loginform" action="auth/login.php" method="POST">
                 <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="role" id="roleinput" value="student">
+                <?php if ($notice): ?><p class="form-error" style="color:#2E7D32;margin:0 0 10px;font-size:14px;"><?= e($notice) ?></p><?php endif; ?>
                 <?php if ($error): ?><p class="form-error" style="color:#8b1e1e;margin:0 0 10px;font-size:14px;"><?= e($error) ?></p><?php endif; ?>
                 <input type="text" name="username" placeholder="Username or Email" required>
                 <input type="password" name="password" placeholder="Password" required>
                 <button type="submit" class="loginbtn">Login</button>
             </form>
 
+            <p class="signuplink"><a href="auth/forgot-password.php">Forgot password?</a></p>
             <p class="signuplink">Don't have an account? <a href="signup.php">Sign up</a></p>
         </div>
     </div>
