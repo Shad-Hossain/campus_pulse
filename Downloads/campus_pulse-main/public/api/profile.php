@@ -1,6 +1,8 @@
 <?php
 // GET  -> profile + notification settings
 // POST {full_name, bio}  and/or  {settings:{traffic_alerts, weather_alerts, event_reminders, research_alerts}}
+//      and/or  {current_password, new_password}         (change password)
+//      and/or  multipart avatar file                     (change profile picture)
 require_once __DIR__ . '/../../includes/helpers.php';
 
 api_run(function () {
@@ -9,7 +11,7 @@ api_run(function () {
     $keys = ['traffic_alerts', 'weather_alerts', 'event_reminders', 'research_alerts'];
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $st = $pdo->prepare('SELECT full_name, username, email, role, department, bio FROM users WHERE id = ?');
+        $st = $pdo->prepare('SELECT full_name, username, email, role, department, bio, avatar FROM users WHERE id = ?');
         $st->execute([$user['id']]);
         $profile = $st->fetch();
 
@@ -34,6 +36,49 @@ api_run(function () {
         $_SESSION['user']['name'] = $name;
     }
 
+    // change password
+    if (isset($in['new_password']) && $in['new_password'] !== '') {
+        $st = $pdo->prepare('SELECT password_hash FROM users WHERE id = ?');
+        $st->execute([$user['id']]);
+        $row = $st->fetch();
+        if (!$row || !password_verify($in['current_password'] ?? '', $row['password_hash'])) {
+            json_out(['error' => 'Current password is incorrect.'], 422);
+        }
+        if (strlen($in['new_password']) < 8) {
+            json_out(['error' => 'New password must be at least 8 characters.'], 422);
+        }
+        $pdo->prepare('UPDATE users SET password_hash = ? WHERE id = ?')
+            ->execute([password_hash($in['new_password'], PASSWORD_DEFAULT), $user['id']]);
+    }
+
+    // change profile picture
+    $avatarUrl = null;
+    if (!empty($_FILES['avatar']) && $_FILES['avatar']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $f = $_FILES['avatar'];
+        if ($f['error'] !== UPLOAD_ERR_OK) {
+            json_out(['error' => 'Upload failed (file too large? check upload_max_filesize in php.ini).'], 422);
+        }
+        if ($f['size'] > 5 * 1024 * 1024) {
+            json_out(['error' => 'Image must be 5 MB or smaller.'], 422);
+        }
+        $ext     = strtolower(pathinfo($f['name'], PATHINFO_EXTENSION));
+        $allowed = ['png', 'jpg', 'jpeg', 'webp'];
+        if (!in_array($ext, $allowed, true)) {
+            json_out(['error' => 'Allowed image types: ' . implode(', ', $allowed)], 422);
+        }
+        $dir = __DIR__ . '/../uploads/avatars';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
+        $name = 'u' . $user['id'] . '_' . bin2hex(random_bytes(6)) . '.' . $ext;   // random name: never trust the original one
+        if (!move_uploaded_file($f['tmp_name'], "$dir/$name")) {
+            json_out(['error' => 'Could not save the image.'], 500);
+        }
+        $avatarUrl = 'uploads/avatars/' . $name;
+        $pdo->prepare('UPDATE users SET avatar = ? WHERE id = ?')->execute([$avatarUrl, $user['id']]);
+        $_SESSION['user']['avatar'] = $avatarUrl;
+    }
+
     if (isset($in['settings']) && is_array($in['settings'])) {
         $vals = [];
         foreach ($keys as $k) {
@@ -47,5 +92,5 @@ api_run(function () {
                                      event_reminders = VALUES(event_reminders), research_alerts = VALUES(research_alerts)'
         )->execute([$user['id'], $vals['traffic_alerts'], $vals['weather_alerts'], $vals['event_reminders'], $vals['research_alerts']]);
     }
-    json_out(['ok' => true, 'name' => $_SESSION['user']['name']]);
+    json_out(['ok' => true, 'name' => $_SESSION['user']['name'], 'avatar' => $avatarUrl]);
 });
