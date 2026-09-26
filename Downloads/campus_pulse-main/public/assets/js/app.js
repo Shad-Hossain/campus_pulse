@@ -136,7 +136,7 @@
             ticker.style.animation = 'none';
             void ticker.offsetWidth; // force reflow
             ticker.style.animation = '';
-            ticker.style.animationDuration = Math.max(10, tickerMsg.length * 0.22) + 's';
+            ticker.style.animationDuration = Math.max(22, tickerMsg.length * 0.45) + 's';
         }
 
         if (CP.user.role === 'admin') {

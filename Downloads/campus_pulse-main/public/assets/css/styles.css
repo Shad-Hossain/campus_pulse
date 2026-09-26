@@ -399,6 +399,10 @@ html, body {
     animation: ticker-scroll 18s linear infinite;
 }
 
+.dash-ticker-track:hover #ticker-text{
+    animation-play-state: paused;
+}
+
 @keyframes ticker-scroll{
     from{ transform: translateX(0); }
     to{ transform: translateX(-100%); }
